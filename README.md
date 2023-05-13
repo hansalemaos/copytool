@@ -1,10 +1,14 @@
 # copytool
 copytool copies files hell-bent for leather
 
-TeraCopy needs 4 minutes, copytool 6 seconds
+### Tested+compiled against Windows 10 / Python 3.10 / Anaconda
+
+
+TeraCopy needs 4 minutes, copytool does it 6 seconds
 ![](https://github.com/hansalemaos/copytool/blob/main/fastcopyscreenshot.png?raw=true)
 
 ## CLI
+Compiled EXE: [](https://github.com/hansalemaos/copytool/raw/main/copytool.exe)
 
       Example: copytool --src "C:\ProgramData\anaconda3\envs" --dst "e:\envbackup" --use_tqdm 1 --copy_date 1 --copy_permission 0 --overwrite 1
       --src                     str         (source folder)
@@ -19,6 +23,7 @@ TeraCopy needs 4 minutes, copytool 6 seconds
 ## Python
 
 ```python
+# pip install copytool 
 from copytool import get_all_files_on_hdd_and_copy
 get_all_files_on_hdd_and_copy(
     src = r"C:\path",
