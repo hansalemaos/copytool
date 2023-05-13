@@ -1,4 +1,19 @@
-from buffcall import get_mu
+import importlib
+
+try:
+    try:
+        from buffcall import get_mu
+    except Exception:
+        try:
+            from buffercalc import get_mu
+        except Exception:
+            pyximport = importlib.import_module("pyximport")
+            pyximport.install(inplace=True)
+            from buffercalc import get_mu
+except Exception:
+    pass
+
+
 from hackyargparser import add_sysargv, config
 import sys
 from datetime import datetime
@@ -13,23 +28,21 @@ from ctypes import wintypes, byref, WinDLL
 from time import perf_counter
 
 
-config.helptext = (
-r"""
-  --src                     str         (source folder)
-  --dst                     str         (destination folder)
-  --log                     str  ""     (csv log)
-  --copy_date               int  0      (copy date stats)
-  --copy_permission         int  0      (copy permissions)
-  --use_tqdm                int  1      (show progress bar)
-  --overwrite               int  1      (overwrite existing files in dst)
-  
-  Press ENTER to exit! 
-"""
-)
-config.kill_when_not_there(
-    ("--src", "--dst")
-)  # If those arguments are not passed, config.helptext will be printed, and sys.exit will be called
-config.stop_after_kill = True  # Stop after printing config.helptext -> input()
+if __name__ == '__main__':
+    config.helptext = r"""
+      Example: copytool --src "C:\ProgramData\anaconda3\envs" --dst "e:\envbackup" --use_tqdm 1 --copy_date 1 --copy_permission 0 --overwrite 1
+      --src                     str         (source folder)
+      --dst                     str         (destination folder)
+      --log                     str  ""     (csv log)
+      --copy_date               int  0      (copy date stats)
+      --copy_permission         int  0      (copy permissions)
+      --use_tqdm                int  1      (show progress bar)
+      --overwrite               int  1      (overwrite existing files in dst)
+      
+      Press ENTER to exit! 
+    """
+    config.kill_when_not_there(("--src", "--dst"))
+    config.stop_after_kill = True
 conf = sys.modules[__name__]
 conf.tq = None
 conf.uffsfilepath = None
@@ -213,9 +226,9 @@ def get_all_files_on_hdd_and_copy(
         axis=1,
     )
     if use_tqdm:
-        print("\n\n")
-        print(perf_counter() - start)
         conf.tq.close()
+    print("\n\n")
+    print(perf_counter() - start)
     if log:
         logfile = os.path.normpath(log)
         touch(logfile)
