@@ -13,7 +13,6 @@ try:
 except Exception:
     pass
 
-
 from hackyargparser import add_sysargv, config
 import sys
 from datetime import datetime
@@ -27,7 +26,6 @@ from getfilenuitkapython import get_filepath
 from ctypes import wintypes, byref, WinDLL
 from time import perf_counter
 
-
 if __name__ == '__main__':
     config.helptext = r"""
       Example: copytool --src "C:\ProgramData\anaconda3\envs" --dst "e:\envbackup" --use_tqdm 1 --copy_date 1 --copy_permission 0 --overwrite 1
@@ -38,7 +36,7 @@ if __name__ == '__main__':
       --copy_permission         int  0      (copy permissions)
       --use_tqdm                int  1      (show progress bar)
       --overwrite               int  1      (overwrite existing files in dst)
-      
+
       Press ENTER to exit! 
     """
     config.kill_when_not_there(("--src", "--dst"))
@@ -50,11 +48,14 @@ try:
     O_BINARY = os.O_BINARY
 except:
     O_BINARY = 0
-READ_FLAGS = os.O_RDONLY | O_BINARY
-WRITE_FLAGS = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | O_BINARY
+READ_FLAGS = os.O_RDONLY | O_BINARY #| os.O_RANDOM #| os.O_NOINHERIT | os.O_RANDOM #os.O_SEQUENTIAL #| os.O_NOINHERIT | os.O_SEQUENTIAL #| os.O_SHORT_LIVED
+WRITE_FLAGS = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | O_BINARY #| os.O_RANDOM   #| os.O_NOINHERIT | os.O_RANDOM #os.O_SEQUENTIAL# os.O_NOINHERIT |  # | os.O_SHORT_LIVED  #| os.O_TEMPORARY #| os.O_SHORT_LIVED
 kernel32 = WinDLL("kernel32", use_last_error=True)
+r"""
+.\python.exe "C:\ProgramData\anaconda3\envs\dfdir\Lib\site-packages\copytool\__init__.py" --src "C:\ProgramData\anaconda3\envs" --dst "e:\envbackup1x9" --use_tqdm 1 --copy_date 1 --copy_permission 0 --overwrite 1
+"""
 
-
+# | os.O_NOINHERIT | os.O_SEQUENTIAL
 @cache
 def mkdirsall(folderfipath):
     try:
@@ -71,18 +72,18 @@ def t2stamp(t):
 
 
 def copyallfiles(
-    aa_path,
-    aa_archive,
-    destfolder,
-    buffer,
-    copy_date,
-    copy_permission,
-    usetqm,
-    aa_last_written: bytes | None = None,
-    aa_last_accessed: bytes | None = None,
-    aa_created: bytes | None = None,
-    aa_attributes=None,
-    overwrite=True,
+        aa_path,
+        aa_archive,
+        destfolder,
+        buffer,
+        copy_date,
+        copy_permission,
+        usetqm,
+        aa_last_written: bytes | None = None,
+        aa_last_accessed: bytes | None = None,
+        aa_created: bytes | None = None,
+        aa_attributes=None,
+        overwrite=True,
 ):
     newfipath = os.path.normpath(os.path.join(destfolder, aa_path[2:].strip("\\/")))
     if not overwrite:
@@ -142,18 +143,17 @@ def get_mu2(buffer):
 
 
 def copyfile(
-    src: str, dst: str, copystat: bool = True, buffer: int = 1000 * 1024
+        src: str, dst: str, copystat: bool = True, buffer: int = 1000 * 1024
 ) -> bool:
     copyok = False
     buffer = get_mu2(buffer)
     try:
-        if not copystat:
-            fin = os.open(src, READ_FLAGS)
-            stat_ = os.fstat(fin)
-            fout = os.open(dst, WRITE_FLAGS, stat_.st_mode)
-            for x in iter(lambda: os.read(fin, buffer), b""):
-                os.write(fout, x)
-            copyok = True
+        fin = os.open(src, READ_FLAGS)
+        stat_ = os.fstat(fin)
+        fout = os.open(dst, WRITE_FLAGS, stat_.st_mode)
+        for x in iter(lambda: os.read(fin, buffer), b""):
+            os.write(fout, x)
+        copyok = True
     finally:
         try:
             os.close(fout)
@@ -171,13 +171,13 @@ def copyfile(
 
 @add_sysargv
 def get_all_files_on_hdd_and_copy(
-    src: str = "",
-    dst: str = "",
-    log: str = "",
-    copy_date: int = 0,
-    copy_permission: int = 0,
-    use_tqdm: int = 1,
-    overwrite: int = 1,
+        src: str = "",
+        dst: str = "",
+        log: str = "",
+        copy_date: int = 1,
+        copy_permission: int = 0,
+        use_tqdm: int = 1,
+        overwrite: int = 1,
 ):
     print(locals())
     copy_date = bool(copy_date)
@@ -237,10 +237,10 @@ def get_all_files_on_hdd_and_copy(
 
 
 def set_times_on_file(
-    path: str,
-    created_timestamp: int = None,
-    access_timestamp: int = None,
-    modify_timestamp: int = None,
+        path: str,
+        created_timestamp: int = None,
+        access_timestamp: int = None,
+        modify_timestamp: int = None,
 ):
     timestamp = int((created_timestamp * 1e7) + 116444736e9)
     ctime = wintypes.FILETIME(timestamp & 0xFFFFFFFF, timestamp >> 32)
