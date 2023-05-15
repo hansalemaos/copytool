@@ -39,6 +39,7 @@ if __name__ == "__main__":
       --copy_permission         int  0      (copy permissions)
       --use_tqdm                int  1      (show progress bar)
       --overwrite               int  1      (overwrite existing files in dst)
+      --use_uffs                int  1      (use uffs to get a list of files)
 
       Press ENTER to exit! 
     """

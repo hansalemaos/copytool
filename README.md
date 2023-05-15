@@ -8,7 +8,9 @@ TeraCopy needs 4 minutes, copytool does it 6 seconds
 ![](https://github.com/hansalemaos/copytool/blob/main/fastcopyscreenshot.png?raw=true)
 
 ## CLI
-Compiled EXE: [](https://github.com/hansalemaos/copytool/raw/main/copytool.exe)
+Compiled EXE: 
+[](https://github.com/hansalemaos/copytool/raw/main/copytool.zip)
+[](https://github.com/hansalemaos/copytool/raw/main/copytool.z01)
 
       Example: copytool --src "C:\ProgramData\anaconda3\envs" --dst "e:\envbackup" --use_tqdm 1 --copy_date 1 --copy_permission 0 --overwrite 1
       --src                     str         (source folder)
@@ -18,6 +20,7 @@ Compiled EXE: [](https://github.com/hansalemaos/copytool/raw/main/copytool.exe)
       --copy_permission         int  0      (copy permissions)
       --use_tqdm                int  1      (show progress bar)
       --overwrite               int  1      (overwrite existing files in dst)
+      --use_uffs                int  1      (use uffs to get a list of files)
 
 
 ## Python
