@@ -3,7 +3,6 @@ import cython
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-@cython.nogil
 cpdef get_mu(buffer):
     cdef int multi = 8*512
     cdef int multi2 = multi
@@ -20,5 +19,6 @@ cpdef get_mu(buffer):
             buffer = buffer2
         else:
             buffer = 512*4
-
+    if buffer == 0:
+        buffer=1
     return buffer

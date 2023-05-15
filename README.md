@@ -29,9 +29,21 @@ get_all_files_on_hdd_and_copy(
     src = r"C:\path",
     dst = r"e:\dest",
     log = "c:\\copylog.csv",
-    copy_date= 1,
+    copy_date= 0,
     copy_permission= 0,
     use_tqdm = 1,
     overwrite = 1,
+    use_uffs = 1
+)     
+
+get_all_files_on_hdd_and_copy(
+    src = r"C:\path",
+    dst = r"e:\dest",
+    log = "",
+    copy_date= 0,
+    copy_permission= 0,
+    use_tqdm = 1,
+    overwrite = 1,
+    use_uffs = 0 # no logging without uffs 
 )     
 ```
